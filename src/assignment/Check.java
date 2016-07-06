@@ -32,15 +32,29 @@ public class Check {
 
     /**
      *
-     * @param param
+     * @param input
      */
-    public static void checkVertice(String[] param) {
+    public static boolean existsVertice(String input) {
+        if (something happens) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean existsEdge(String input1, String input2) {
+        if (something happens) {
+            return true;
+        }
+        return false;
     }
 
     /**
      *
      * @param param
      */
-    public static void checkEquals(String[] param) {
+    public static void checkEquals(String input) throws NavigationException {
+        if (vertice 1 == vertice 2) {
+            throw new NavigationException("Error, please choose two vertices that are not the same!");
+        }
     }
 }

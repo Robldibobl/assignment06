@@ -62,7 +62,7 @@ public class Main {
                         default:
                             throw new InputException("Error, unknown command!");
                     }
-                } catch (InputException e) {
+                } catch (InputException | NavigationException e) {
                     Terminal.printLine(e.getMessage());
                 }
             }
