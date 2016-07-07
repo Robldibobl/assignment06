@@ -2,6 +2,8 @@ package assignment;
 
 import edu.kit.informatik.Terminal;
 
+import java.io.IOException;
+
 /**
  * Created by Robin Fritz on 01.07.2016.
  */
@@ -9,10 +11,16 @@ public class Main {
 
     /**
      * Main method; splits input into commands and parameters.
+     *
      * @param args Commandline parameters
      */
     public static void main(String[] args) {
-        NavigationSystem navigation = new NavigationSystem();
+        NavigationSystem navigation = null;
+        try {
+            navigation = new NavigationSystem(args[0]);
+        } catch (InputException | NavigationException e) {
+            Terminal.printLine(e.getMessage());
+        }
         boolean b = true;
 
         while (b == true) {
@@ -35,6 +43,10 @@ public class Main {
                     }
 
                     switch (inputArr[0]) {
+                        case "test":
+                            Terminal.printLine(navigation.test(param));
+                            break;
+
                         case "search":
                             Terminal.printLine(navigation.search(param));
                             break;
@@ -62,7 +74,7 @@ public class Main {
                         default:
                             throw new InputException("Error, unknown command!");
                     }
-                } catch (InputException | NavigationException e) {
+                } catch (InputException | NavigationException | IOException e) {
                     Terminal.printLine(e.getMessage());
                 }
             }

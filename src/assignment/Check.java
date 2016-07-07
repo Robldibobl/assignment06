@@ -1,5 +1,7 @@
 package assignment;
 
+import java.util.List;
+
 /**
  * Created by Robin Fritz on 01.07.2016.
  */
@@ -34,15 +36,15 @@ public class Check {
      *
      * @param input
      */
-    public static boolean existsVertice(String input) {
-        if (something happens) {
+    public static boolean existsVertex(String input) {
+        if (true) { //vertices.contains(input)) {
             return true;
         }
         return false;
     }
 
     public static boolean existsEdge(String input1, String input2) {
-        if (something happens) {
+        if (true) {
             return true;
         }
         return false;
@@ -50,10 +52,12 @@ public class Check {
 
     /**
      *
-     * @param param
+     * @param VertexA
+     * @param VertexB
+     * @throws NavigationException
      */
-    public static void checkEquals(String input) throws NavigationException {
-        if (vertice 1 == vertice 2) {
+    public static void checkEquals(String VertexA, String VertexB) throws NavigationException {
+        if (VertexA.toUpperCase().equals(VertexB.toUpperCase())) {
             throw new NavigationException("Error, please choose two vertices that are not the same!");
         }
     }
