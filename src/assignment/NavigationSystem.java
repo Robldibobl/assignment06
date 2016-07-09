@@ -34,9 +34,8 @@ public class NavigationSystem {
     public int test(String[] param) throws InputException {
         String a = param[0];
         String b = param[1];
-        boolean c = true;
 
-        if (c) {
+        if (true) {
             for (int i = 0; i < vertices.size(); i++) {
                 if (vertices.get(i).equals(a)) {
                     for (int j = 0; j < vertices.size(); j++) {
@@ -48,6 +47,23 @@ public class NavigationSystem {
             }
         }
         return 37;
+    }
+
+    public String testMatrix(String[] param) throws InputException {
+        String output = new String();
+        int temp;
+
+        for (int i = 0; i < vertices.size(); i++) {
+            for (int j = 0; j < vertices.size(); j++) {
+                temp = distances[i][j];
+
+                output += "" + temp + " ";
+            }
+            output += "" + "\n";
+        }
+        output = output.trim();
+
+        return output;
     }
 
     /**
@@ -85,7 +101,7 @@ public class NavigationSystem {
     public void fillMatrix() throws InputException, NavigationException {
         String tempA = new String();
         String tempB = new String();
-        int distance = 0;
+        int distance;
 
         for (int k = 0; k < edges.size(); k++) {
             String[] matrixEntries = edges.get(k).split(";");
@@ -93,11 +109,12 @@ public class NavigationSystem {
             tempB = matrixEntries[1];
 
             try {
-                distance = Integer.parseInt(matrixEntries[2]);
+               Integer.parseInt(matrixEntries[2]);
             } catch (NumberFormatException e) {
                 throw new InputException("Error, please choose a number as distance!");
             }
             Check.checkInteger(Integer.parseInt(matrixEntries[2]));
+
             distance = Integer.parseInt(matrixEntries[2]);
 
             Check.checkEquals(tempA, tempB);
@@ -105,7 +122,7 @@ public class NavigationSystem {
             for (int i = 0; i < vertices.size(); i++) {
                 if (vertices.get(i).equals(tempA)) {
                     for (int j = 0; j < vertices.size(); j++) {
-                        if (vertices.get(j).equals(tempA)) {
+                        if (vertices.get(j).equals(tempB)) {
                             distances[i][j] = distance;
                             distances[j][i] = distance;
                         }
@@ -115,13 +132,19 @@ public class NavigationSystem {
         }
     }
 
-    private void writeFile(String input) throws IOException {
+    private String writeFile() throws IOException {
         FileWriter writer = new FileWriter(PATH);
-        /*
-        erst vertices, dann "--", dann edges
-         */
+        String output = new String();
+        String temp;
 
-        writer.write(input);
+
+
+        writer.write(output);
+        readIn();
+
+        temp = output;
+
+        return temp;
     }
 
     private void clearFile() throws IOException {
@@ -181,6 +204,7 @@ public class NavigationSystem {
             throw new InputException("Error, please choose a number!");
         }
         Check.checkInteger(Integer.parseInt(param[2]));
+        number = Integer.parseInt(param[2]);
 
         for (int i = 0; i < distances.length; i++) {
             if (vertices.get(i).equals(param[0])) {
@@ -189,6 +213,11 @@ public class NavigationSystem {
                         if (distances[i][j] != 0) {
                             throw new NavigationException("Error, edge already exists!"); //Fehler wird nicht aufgerufen
                         }
+                        distances[i][j] = number;
+                        distances[j][i] = number;
+
+                        edges.add("penis");
+                        edges.add(param[0] + ";" + param[1] + ";" + param[2]);
                     }
                 }
             }
@@ -218,8 +247,6 @@ public class NavigationSystem {
             output += "" + edges.get(j) + "\n";
         }
         output = output.trim();
-
-        writeFile(output);
 
         return output;
         /*

@@ -47,6 +47,10 @@ public class Main {
                             Terminal.printLine(navigation.test(param));
                             break;
 
+                        case "matrix":
+                            Terminal.printLine(navigation.testMatrix(param));
+                            break;
+
                         case "search":
                             Terminal.printLine(navigation.search(param));
                             break;
