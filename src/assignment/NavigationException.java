@@ -1,7 +1,8 @@
 package assignment;
 
 /**
- * Created by Robin Fritz on 01.07.2016.
+ * @author Robin Fritz
+ * @version final version
  */
 public class NavigationException extends Exception {
 

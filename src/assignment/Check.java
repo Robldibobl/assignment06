@@ -1,9 +1,8 @@
 package assignment;
 
-import java.util.List;
-
 /**
- * Created by Robin Fritz on 01.07.2016.
+ * @author Robin Fritz
+ * @version final version
  */
 public class Check {
 
@@ -34,6 +33,7 @@ public class Check {
 
     /**
      * Checks if a string contains only letters.
+     *
      * @param input Input
      * @throws InputException For input format type errors
      */
@@ -56,12 +56,13 @@ public class Check {
 
     /**
      * Checks if the two vertices are the same.
-     * @param VertexA Input one
-     * @param VertexB Input two
+     *
+     * @param vertexA Input one
+     * @param vertexB Input two
      * @throws NavigationException For navigation system type errors
      */
-    public static void checkEquals(String VertexA, String VertexB) throws NavigationException {
-        if (VertexA.toUpperCase().equals(VertexB.toUpperCase())) {
+    public static void checkEquals(String vertexA, String vertexB) throws NavigationException {
+        if (vertexA.toLowerCase().equals(vertexB.toLowerCase())) {
             throw new NavigationException("Error, please choose two vertices that are not the same!");
         }
     }

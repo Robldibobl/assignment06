@@ -5,7 +5,8 @@ import edu.kit.informatik.Terminal;
 import java.io.IOException;
 
 /**
- * Created by Robin Fritz on 01.07.2016.
+ * @author Robin Fritz
+ * @version final version
  */
 public class Main {
 
@@ -16,12 +17,16 @@ public class Main {
      */
     public static void main(String[] args) {
         NavigationSystem navigation = null;
+        boolean b = true;
+
         try {
             navigation = new NavigationSystem(args[0]);
         } catch (InputException | NavigationException e) {
+            if (e.getMessage().equals("Error, invalid input in the text file! The program will now exit!")) {
+                b = false; //klappt nicht?
+            }
             Terminal.printLine(e.getMessage());
         }
-        boolean b = true;
 
         while (b == true) {
             String input = Terminal.readLine();
@@ -43,14 +48,6 @@ public class Main {
                     }
 
                     switch (inputArr[0]) {
-                        case "test":
-                            Terminal.printLine(navigation.test(param));
-                            break;
-
-                        case "matrix":
-                            Terminal.printLine(navigation.testMatrix(param));
-                            break;
-
                         case "search":
                             Terminal.printLine(navigation.search(param));
                             break;

@@ -2,20 +2,19 @@ package assignment;
 
 import edu.kit.informatik.Terminal;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Robin Fritz on 01.07.2016.
+ * @author Robin Fritz
+ * @version final version
  */
 public class NavigationSystem {
     private List<String> vertices;
     private List<String> edges;
     private int[][] distances;
-    private final String PATH;
+    private final String path;
 
     /**
      * Constructor of the class NavigationSystem.
@@ -25,52 +24,19 @@ public class NavigationSystem {
      * @throws NavigationException For navigation system type errors
      */
     public NavigationSystem(String path) throws InputException, NavigationException {
-        PATH = path;
+        this.path = path;
         readIn();
         generateMatrix();
         fillMatrix();
     }
 
-    public int test(String[] param) throws InputException {
-        String a = param[0];
-        String b = param[1];
-
-        if (true) {
-            for (int i = 0; i < vertices.size(); i++) {
-                if (vertices.get(i).equals(a)) {
-                    for (int j = 0; j < vertices.size(); j++) {
-                        if (vertices.get(j).equals(b)) {
-                            return distances[i][j];
-                        }
-                    }
-                }
-            }
-        }
-        return 37;
-    }
-
-    public String testMatrix(String[] param) throws InputException {
-        String output = new String();
-        int temp;
-
-        for (int i = 0; i < vertices.size(); i++) {
-            for (int j = 0; j < vertices.size(); j++) {
-                temp = distances[i][j];
-
-                output += "" + temp + " ";
-            }
-            output += "" + "\n";
-        }
-        output = output.trim();
-
-        return output;
-    }
-
     /**
      * Divides the input from the text file into vertices and edges.
+     *
+     * @throws InputException For input format type errors
      */
-    public void readIn() {
-        String[] serialization = Terminal.readFile(PATH);
+    public void readIn() throws InputException {
+        String[] serialization = Terminal.readFile(path);
         vertices = new ArrayList<>();
         edges = new ArrayList<>();
         boolean readVertices = true;
@@ -78,9 +44,8 @@ public class NavigationSystem {
         for (int i = 0; i < serialization.length; i++) {
             if (readVertices && serialization[i].equals("--")) {
                 readVertices = false;
-                i++;
-            }
-            if (readVertices) {
+            } else if (readVertices) {
+                Check.checkString(serialization[i]);
                 vertices.add(serialization[i].toLowerCase());
             } else {
                 edges.add(serialization[i].toLowerCase());
@@ -111,16 +76,17 @@ public class NavigationSystem {
             tempA = matrixEntries[0];
             tempB = matrixEntries[1];
 
+            if (tempA.matches(tempB)) {
+                throw new InputException("Error, invalid input in the text file! The program will now exit!");
+            }
+
             try {
                 Integer.parseInt(matrixEntries[2]);
             } catch (NumberFormatException e) {
-                throw new InputException("Error, please choose a number as distance!");
+                throw new InputException("Error, invalid input in the text file! The program will now exit!");
             }
             Check.checkInteger(Integer.parseInt(matrixEntries[2]));
-
             distance = Integer.parseInt(matrixEntries[2]);
-
-            Check.checkEquals(tempA, tempB);
 
             for (int i = 0; i < vertices.size(); i++) {
                 if (vertices.get(i).equals(tempA)) {
@@ -151,9 +117,20 @@ public class NavigationSystem {
         return output;
     }
 
+    /**
+     * Prints out the shortest distance from start to destination.
+     *
+     * @param param String array with parameters
+     * @return Returns the distance
+     * @throws InputException      For input format type errors
+     * @throws NavigationException For navigation system type errors
+     */
     public int search(String[] param) throws InputException, NavigationException {
         Check.checkAmount(param, 2);
-        SSSP algorithm = new SSSP(vertices, distances, param[0]);
+        param[0] = param[0].toLowerCase();
+        param[1] = param[1].toLowerCase();
+
+        ShortestPath algorithm = new ShortestPath(vertices, distances, param[0]);
 
         if (!vertices.contains(param[0]) || !vertices.contains(param[1])) {
             throw new NavigationException("Error, please choose two existing vertices!");
@@ -162,19 +139,35 @@ public class NavigationSystem {
         return algorithm.search(param[1]);
     }
 
-    public String route(String[] param) throws InputException {
+    /**
+     * Prints out the shortest route from start to destination.
+     *
+     * @param param String array with parameters
+     * @return Returns the route beginning with the start, separating each with one space
+     * @throws InputException      For input format type errors
+     * @throws NavigationException For navigation system type errors
+     */
+    public String route(String[] param) throws InputException, NavigationException {
         Check.checkAmount(param, 2);
-        SSSP algorithm = new SSSP(vertices, distances, param[0]);
+        param[0] = param[0].toLowerCase();
+        param[1] = param[1].toLowerCase();
 
-        if (true) {
+        ShortestPath algorithm = new ShortestPath(vertices, distances, param[0]);
 
+        if (!vertices.contains(param[0]) || !vertices.contains(param[1])) {
+            throw new NavigationException("Error, please choose two existing vertices!");
         }
 
         return algorithm.route(param[1]);
     }
 
-    /*
-    noch nicht getestet
+    /**
+     * Adds edges to the graph.
+     *
+     * @param param String array with parameters
+     * @return Returns OK if added successful
+     * @throws InputException      For input format type errors
+     * @throws NavigationException For navigation system type errors
      */
     public String insert(String[] param) throws InputException, NavigationException {
         Check.checkAmount(param, 3);
@@ -192,7 +185,11 @@ public class NavigationSystem {
             if (!vertices.contains(param[1])) {
                 vertices.add(param[1]);
             }
+            generateMatrix();
+            fillMatrix();
         }
+
+        Check.checkEquals(param[0], param[1]);
 
         int number;
         try {
