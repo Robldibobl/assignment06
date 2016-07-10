@@ -33,28 +33,32 @@ public class Check {
     }
 
     /**
-     *
-     * @param input
+     * Checks if a string contains only letters.
+     * @param input Input
+     * @throws InputException For input format type errors
      */
-    public static boolean existsVertex(String input) {
-        if (true) { //vertices.contains(input)) {
-            return true;
-        }
-        return false;
-    }
+    public static void checkString(String input) throws InputException {
+        String temp = input;
+        temp = temp.replaceAll("[*0-9]", "");
 
-    public static boolean existsEdge(String input1, String input2) {
-        if (true) {
-            return true;
+        if (input.matches("")) {
+            throw new InputException("Error, vertex names can not be empty!");
         }
-        return false;
+
+        if (input.contains(",")) {
+            throw new InputException("Error, vertex names can only contain letters!");
+        }
+
+        if (!temp.matches(input)) {
+            throw new InputException("Error, vertex names can only contain letters!");
+        }
     }
 
     /**
-     *
-     * @param VertexA
-     * @param VertexB
-     * @throws NavigationException
+     * Checks if the two vertices are the same.
+     * @param VertexA Input one
+     * @param VertexB Input two
+     * @throws NavigationException For navigation system type errors
      */
     public static void checkEquals(String VertexA, String VertexB) throws NavigationException {
         if (VertexA.toUpperCase().equals(VertexB.toUpperCase())) {

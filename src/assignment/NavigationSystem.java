@@ -81,9 +81,9 @@ public class NavigationSystem {
                 i++;
             }
             if (readVertices) {
-                vertices.add(serialization[i]);
+                vertices.add(serialization[i].toLowerCase());
             } else {
-                edges.add(serialization[i]);
+                edges.add(serialization[i].toLowerCase());
             }
         }
     }
@@ -95,12 +95,15 @@ public class NavigationSystem {
         distances = new int[vertices.size()][vertices.size()];
     }
 
-    /*
-    funktioniert noch nicht, jeder Eintrag ist 0
+    /**
+     * Fills the matrix with the distance between two vertices marking the indexes.
+     *
+     * @throws InputException      For input format type errors
+     * @throws NavigationException For navigation system type errors
      */
     public void fillMatrix() throws InputException, NavigationException {
-        String tempA = new String();
-        String tempB = new String();
+        String tempA;
+        String tempB;
         int distance;
 
         for (int k = 0; k < edges.size(); k++) {
@@ -109,7 +112,7 @@ public class NavigationSystem {
             tempB = matrixEntries[1];
 
             try {
-               Integer.parseInt(matrixEntries[2]);
+                Integer.parseInt(matrixEntries[2]);
             } catch (NumberFormatException e) {
                 throw new InputException("Error, please choose a number as distance!");
             }
@@ -132,52 +135,42 @@ public class NavigationSystem {
         }
     }
 
-    private String writeFile() throws IOException {
-        FileWriter writer = new FileWriter(PATH);
+    private String generateOutput() {
         String output = new String();
-        String temp;
 
+        for (int i = 0; i < vertices.size(); i++) {
+            output += "" + vertices.get(i) + "\n";
+        }
+        output += "" + "--" + "\n";
 
+        for (int j = 0; j < edges.size(); j++) {
+            output += "" + edges.get(j) + "\n";
+        }
+        output = output.trim();
 
-        writer.write(output);
-        readIn();
-
-        temp = output;
-
-        return temp;
-    }
-
-    private void clearFile() throws IOException {
-        PrintWriter pw = new PrintWriter(PATH);
-        pw.close();
+        return output;
     }
 
     public int search(String[] param) throws InputException, NavigationException {
         Check.checkAmount(param, 2);
+        SSSP algorithm = new SSSP(vertices, distances, param[0]);
 
         if (!vertices.contains(param[0]) || !vertices.contains(param[1])) {
             throw new NavigationException("Error, please choose two existing vertices!");
         }
 
-        int distance = 0;
-
-        /*
-        Distanz zwischen Startstadt und Zielstadt wird ermittelt, als distance ausgegeben
-         */
-
-        return distance;
+        return algorithm.search(param[1]);
     }
 
     public String route(String[] param) throws InputException {
         Check.checkAmount(param, 2);
+        SSSP algorithm = new SSSP(vertices, distances, param[0]);
 
-        String route = new String();
+        if (true) {
 
-        /*
-        Geht nach dem Algorithmus durch den Graphen, gibt die berechnete Route im String route aus
-         */
+        }
 
-        return route;
+        return algorithm.route(param[1]);
     }
 
     /*
@@ -185,6 +178,10 @@ public class NavigationSystem {
      */
     public String insert(String[] param) throws InputException, NavigationException {
         Check.checkAmount(param, 3);
+        Check.checkString(param[0]);
+        Check.checkString(param[1]);
+        param[0] = param[0].toLowerCase();
+        param[1] = param[1].toLowerCase();
 
         if (!vertices.contains(param[0]) && !vertices.contains(param[1])) {
             throw new NavigationException("Error, please choose at least one existing vertex!");
@@ -199,7 +196,7 @@ public class NavigationSystem {
 
         int number;
         try {
-            number = Integer.parseInt(param[2]);
+            Integer.parseInt(param[2]);
         } catch (NumberFormatException e) {
             throw new InputException("Error, please choose a number!");
         }
@@ -211,56 +208,45 @@ public class NavigationSystem {
                 for (int j = 0; j < distances.length; j++) {
                     if (vertices.get(j).equals(param[1])) {
                         if (distances[i][j] != 0) {
-                            throw new NavigationException("Error, edge already exists!"); //Fehler wird nicht aufgerufen
+                            throw new NavigationException("Error, edge already exists!");
                         }
                         distances[i][j] = number;
                         distances[j][i] = number;
 
-                        edges.add("penis");
                         edges.add(param[0] + ";" + param[1] + ";" + param[2]);
                     }
                 }
             }
         }
 
-        /*
-        Falls mindestens einer der Knoten existiert: fügt den nicht existierenden dem Graphen hinzu und
-        erstellt eine Kante zwischen den beiden der Länge number
-         */
-
         return "OK";
     }
 
-    /*
-    file wird nicht geschrieben
+    /**
+     * Prints out the current graph.
+     *
+     * @param param String array with parameters
+     * @return Returns the list of vertices and edges
+     * @throws InputException For input format type errors
+     * @throws IOException    For navigation system type errors
      */
     public String info(String[] param) throws InputException, IOException {
         Check.checkAmount(param, 0);
-        String output = new String();
 
-        for (int i = 0; i < vertices.size(); i++) {
-            output += "" + vertices.get(i) + "\n";
-        }
-        output += "" + "--" + "\n";
-
-        for (int j = 0; j < edges.size(); j++) {
-            output += "" + edges.get(j) + "\n";
-        }
-        output = output.trim();
-
-        return output;
-        /*
-        Aktualisiert das ursprüngliche input String array und gibt es aus (dieses dann auch in der input Datei
-        speichern)
-         */
+        return generateOutput();
     }
 
-    /*
-    da stimmt was noch ned
+    /**
+     * Prints out all neighboring vertices.
+     *
+     * @param param String array with parameters
+     * @return Returns all neighboring vertices
+     * @throws InputException      For input format type errors
+     * @throws NavigationException For navigation system type errors
      */
-
     public String nodes(String[] param) throws InputException, NavigationException {
         Check.checkAmount(param, 1);
+        param[0] = param[0].toLowerCase();
         String output = new String();
 
         if (vertices.contains(param[0])) {
