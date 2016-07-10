@@ -2,7 +2,7 @@ package assignment;
 
 /**
  * @author Robin Fritz
- * @version final version
+ * @version 1.0
  */
 public class DijkstraEntry {
     private String vertex;

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 /**
  * @author Robin Fritz
- * @version final version
+ * @version 1.0
  */
 public class Main {
 

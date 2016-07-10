@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @author Robin Fritz
- * @version final version
+ * @version 1.0
  */
 public class NavigationSystem {
     private List<String> vertices;

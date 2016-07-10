@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * @author Robin Fritz
- * @version final version
+ * @version 1.0
  */
 public class ShortestPath {
     private List<DijkstraEntry> dijkstraTable;
